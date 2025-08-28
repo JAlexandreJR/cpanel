@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -181,19 +182,29 @@ const UserManagementPage = () => {
           body: { 
             isManualAdd: true,
             memberData: {
-              id: member.id,
-              codinome: member.codinome,
+              id: member.id, // Linking existing member by ID
               email: emailToUse,
               password: defaultPassword,
             }
           },
       });
 
-      if (functionError) throw functionError;
+      if (functionError) {
+        let errorMsg = functionError.message;
+        try {
+          const errorBody = await functionError.context.json();
+          if (errorBody && errorBody.error) {
+            errorMsg = errorBody.error;
+          }
+        } catch(e) {
+          // Ignore if cannot parse body
+        }
+        throw new Error(errorMsg);
+      }
       if (functionData.error) throw new Error(functionData.error);
       
       let toastMessage;
-      if (functionData.message.includes("já existia")) {
+      if (functionData.message.includes("vinculado à conta existente")) {
         toastMessage = { title: "Vinculado!", description: `${member.codinome} vinculado à conta existente de ${emailToUse}.` };
       } else {
         toastMessage = { title: "Conta Criada e Vinculada!", description: `Conta para ${member.codinome} (${emailToUse}) criada. Senha padrão: ${defaultPassword}.`, duration: 10000 };

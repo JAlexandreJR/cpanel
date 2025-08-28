@@ -1,9 +1,8 @@
-
 import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/customSupabaseClient';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -330,7 +329,7 @@ const RecruitmentPage = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <YouTubeEmbed videoId="oeWWMwUG7xE" title="Como encontrar seu SteamID64" />
+            <YouTubeEmbed videoId="r1kG1b_2d-A" title="Como encontrar seu SteamID64" />
           </CardContent>
         </Card>
       </motion.div>

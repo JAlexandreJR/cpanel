@@ -49,7 +49,7 @@ const ParallaxBackgroundContainer = ({ children, backgroundImageUrl, videoPath, 
             <img  
               alt="Fundo cinematográfico do clã GERR" 
               className="w-full h-full object-cover opacity-20" 
-             src="gifone.gif" />
+             src="https://images.unsplash.com/photo-1501431531455-4b83a0027ea2" />
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>

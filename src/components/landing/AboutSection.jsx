@@ -56,7 +56,7 @@ import React from 'react';
                 variants={fadeInDelayed(0.3)}
               >
                 <p>
-                  Fundado em 2023, o Grupo Especial de Retomada e Resgate (GERR) nasceu da paixão de um grupo de amigos por jogos táticos e simulação militar (Milsim). Nossa missão é criar um ambiente imersivo, desafiador e, acima de tudo, divertido, onde a estratégia, a comunicação e o trabalho em equipe são os pilares para o sucesso.
+                  Fundado em [ANO DE FUNDAÇÃO], o Grupo Especial de Retomada e Resgate (GERR) nasceu da paixão de um grupo de amigos por jogos táticos e simulação militar (Milsim). Nossa missão é criar um ambiente imersivo, desafiador e, acima de tudo, divertido, onde a estratégia, a comunicação e o trabalho em equipe são os pilares para o sucesso.
                 </p>
                 <p>
                   No GERR, valorizamos o respeito mútuo, a disciplina tática e o aprimoramento constante de nossos membros. Acreditamos que cada operador, independentemente de sua patente ou tempo de clã, tem um papel crucial em nossas operações. Promovemos um sistema de progressão justo, baseado no mérito, participação e dedicação.
@@ -75,7 +75,7 @@ import React from 'react';
                 <img  
                     alt="Imagem representativa do Clã GERR em ação" 
                     className="w-full h-auto max-h-[450px] object-contain rounded-lg shadow-lg"
-                 src="discord-banner.jpg" />
+                 src="https://images.unsplash.com/photo-1679364012854-0bf5be39000c" />
                 <p className="text-sm text-muted-foreground mt-4 text-center">Nossa força reside na união e na estratégia.</p>
               </div>
             </motion.div>

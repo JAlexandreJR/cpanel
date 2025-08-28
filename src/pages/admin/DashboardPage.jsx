@@ -1,7 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
     import { cn } from '@/lib/utils';
     import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-    import { User, ShieldAlert, Megaphone, BarChart3, Wallet, FileText, ShoppingCart, Target as MissionIcon, UserCog, MessageSquare, Puzzle, Store, Settings, Menu, X, Laptop as NotebookText, UserPlus, DatabaseBackup, PanelLeft, PanelRight, Calendar, ShieldCheck } from 'lucide-react';
+    import { User, ShieldAlert, Megaphone, BarChart3, Wallet, FileText, ShoppingCart, Target as MissionIcon, UserCog, MessageSquare, Puzzle, Store, Settings, Menu, X, Laptop as NotebookText, UserPlus, DatabaseBackup, PanelLeft, PanelRight, Calendar, ShieldCheck, CalendarCheck, Hand } from 'lucide-react';
     import MembersSection from '@/components/admin/MembersSection';
     import WarningsManagementPage from '@/pages/admin/WarningsManagementPage';
     import AnnouncementsSection from '@/components/admin/AnnouncementsSection';
@@ -11,7 +12,7 @@ import React, { useState, useEffect } from 'react';
     import VipControlPage from '@/pages/admin/VipControlPage';
     import MissionsSection from '@/components/admin/MissionsSection';
     import UserManagementPage from '@/pages/admin/UserManagementPage';
-    import MissionFeedbackPage from '@/pages/admin/MissionFeedbackPage'; 
+    import FeedbackManagementPage from '@/pages/admin/FeedbackManagementPage'; 
     import QuizManagementPage from '@/pages/admin/QuizManagementPage';
     import StoreManagementPage from '@/pages/admin/StoreManagementPage';
     import JustificationsPage from '@/pages/admin/JustificationsPage';
@@ -20,6 +21,7 @@ import React, { useState, useEffect } from 'react';
     import BackupPage from '@/pages/admin/BackupPage';
     import SchedulePage from '@/pages/admin/SchedulePage';
     import CommandingOfficersPage from '@/pages/admin/CommandingOfficersPage';
+    import AttendanceReportPage from '@/pages/admin/AttendanceReportPage';
     import { motion, AnimatePresence } from 'framer-motion';
     import { useAuth } from '@/contexts/AuthContext';
     import { Button } from '@/components/ui/button';
@@ -30,6 +32,7 @@ import React, { useState, useEffect } from 'react';
       { value: "recruitment", label: "Recrutamento", Icon: UserPlus, Component: RecruitmentManagementPage, roles: ['admin', 'recrutador'], group: 'main' },
       { value: "members", label: "Membros", Icon: User, Component: MembersSection, roles: ['admin', 'moderador'], group: 'main' },
       { value: "commanding_officers", label: "Oficiais Comandantes", Icon: ShieldCheck, Component: CommandingOfficersPage, roles: ['admin', 'moderador'], group: 'main' },
+      { value: "attendance_report", label: "Gestão de Frequência", Icon: CalendarCheck, Component: AttendanceReportPage, roles: ['admin', 'moderador'], group: 'main' },
       { value: "justifications", label: "Justificativas", Icon: NotebookText, Component: JustificationsPage, roles: ['admin', 'moderador', 'recrutador'], group: 'main' },
       { value: "warnings", label: "Advertências", Icon: ShieldAlert, Component: WarningsManagementPage, roles: ['admin', 'moderador'], group: 'main' },
       { value: "missions", label: "Missões", Icon: MissionIcon, Component: MissionsSection, roles: ['admin', 'moderador'], group: 'main' },
@@ -41,7 +44,7 @@ import React, { useState, useEffect } from 'react';
       { value: "vip_control", label: "Controle de VIPs", Icon: ShoppingCart, Component: VipControlPage, roles: ['admin'], group: 'more' },
       { value: "recruiter_stats", label: "Estatísticas Rec.", Icon: BarChart3, Component: RecruiterStatisticsPage, roles: ['admin', 'recrutador'], group: 'more' },
       { value: "statistics", label: "Estatísticas Gerais", Icon: BarChart3, Component: StatisticsSection, roles: ['admin', 'moderador'], group: 'more' },
-      { value: "mission_feedback", label: "Feedback Missões", Icon: MessageSquare, Component: MissionFeedbackPage, roles: ['admin', 'moderador', 'recrutador'], group: 'more' },
+      { value: "feedback_management", label: "Gerenciamento de Feedbacks", Icon: MessageSquare, Component: FeedbackManagementPage, roles: ['admin', 'moderador', 'recrutador'], group: 'more' },
       { value: "quiz_management", label: "Gerenciar Quiz", Icon: Puzzle, Component: QuizManagementPage, roles: ['admin', 'moderador'], group: 'more' },
       { value: "store_management", label: "Gerenciar Loja", Icon: Store, Component: StoreManagementPage, roles: ['admin'], group: 'more' },
       { value: "agenda", label: "Agenda", Icon: Calendar, Component: SchedulePage, roles: ['admin', 'moderador', 'recrutador'], group: 'more' },

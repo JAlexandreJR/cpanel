@@ -27,13 +27,13 @@ const staggerContainer = {
 
 const VideosSection = () => {
   const videos = [
-    { id: "SLHkpcsVInA", title: "GERR - Operação Alvorada Vermelha" }, // Substitua pelo ID real
-    { id: "CW6uMkH-C3c", title: "Treinamento Tático Avançado" }, // Substitua pelo ID real
-    { id: "hqBLJw7oeQk", title: "Melhores Momentos - Compilação" }, // Substitua pelo ID real
+    { id: "YOUR_YOUTUBE_VIDEO_ID_1", title: "GERR - Operação Alvorada Vermelha" }, // Substitua pelo ID real
+    { id: "YOUR_YOUTUBE_VIDEO_ID_2", title: "Treinamento Tático Avançado" }, // Substitua pelo ID real
+    { id: "YOUR_YOUTUBE_VIDEO_ID_3", title: "Melhores Momentos - Compilação" }, // Substitua pelo ID real
   ];
 
   // Canal do YouTube - substitua pelo seu
-  const youtubeChannelUrl = "https://www.youtube.com/@ocomandobr"; 
+  const youtubeChannelUrl = "https://www.youtube.com/@YOUR_CLAN_CHANNEL"; 
 
   return (
     <motion.section 

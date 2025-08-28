@@ -1,3 +1,4 @@
+
 # Guia de Políticas de Segurança (RLS) - GERR Painel (Revisado)
 
 Este documento detalha as políticas de segurança (Row Level Security - RLS) simplificadas e reestruturadas para o projeto GERR Painel, garantindo acesso seguro e apropriado aos dados.
@@ -33,6 +34,24 @@ Este documento detalha as políticas de segurança (Row Level Security - RLS) si
     *   **Acesso:** Apenas Atualização (UPDATE).
     *   **Para Quem:** Qualquer usuário autenticado.
     *   **O que faz:** Permite que um usuário atualize **apenas o seu próprio perfil de membro** (onde `user_id` corresponde ao seu ID de autenticação).
+
+---
+
+### Tabela: `justifications`
+
+**Objetivo:** Gerenciar o acesso às justificativas de ausência dos membros.
+
+**Políticas Ativas:**
+
+1.  **Nome:** `Justifications: Admins and Moderadores full access`
+    *   **Acesso:** Total (CRUD).
+    *   **Para Quem:** Usuários com cargo de `admin` ou `moderador`.
+    *   **O que faz:** Permite que a liderança gerencie todas as justificativas.
+
+2.  **Nome:** `Justifications: Staff can view`
+    *   **Acesso:** Apenas Leitura (SELECT).
+    *   **Para Quem:** Usuários com cargo de `admin`, `moderador` ou `recrutador`.
+    *   **O que faz:** Permite que a equipe de liderança e recrutadores vejam as justificativas para estarem cientes da disponibilidade dos membros.
 
 ---
 

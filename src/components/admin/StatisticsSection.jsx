@@ -2,12 +2,13 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Users2, ListChecks, Target, ShieldAlert, BarChart3, Loader2, UserPlus, UserMinus, PieChart as PieIcon, AlertTriangle, Laptop as NotebookText } from 'lucide-react';
+import { Users2, ListChecks, Target, ShieldAlert, BarChart3, Loader2, UserPlus, UserMinus, PieChart as PieIcon, AlertTriangle, Laptop as NotebookText, CalendarDays } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { ResponsiveContainer, BarChart, XAxis, YAxis, Tooltip, Legend, Bar, PieChart, Pie, Cell, LineChart, Line, CartesianGrid } from 'recharts';
 import { PATENTE_ORDER_MAP } from '@/components/admin/members/utils';
 import StatCard from '@/components/admin/statistics/StatCard';
 import RevenueChart from '@/components/admin/statistics/RevenueChart';
+import DailyPresenceHistoryChart from '@/components/admin/statistics/DailyPresenceHistoryChart';
 
 const CHART_COLORS = ['#ef4444', '#f97316', '#eab308', '#84cc16', '#22c55e', '#14b8a6', '#06b6d4', '#3b82f6', '#8b5cf6'];
 const VIBRANT_RED = '#ef4444';
@@ -110,7 +111,11 @@ const StatisticsSection = () => {
     if (!supabase) return;
     setIsLoading(true);
     try {
-      const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+      const { error: syncError } = await supabase.rpc('log_daily_attendance');
+      if (syncError) {
+        toast({ title: "Erro ao sincronizar presença diária", description: syncError.message, variant: "destructive" });
+      }
+
       const todayStr = new Date().toISOString().split('T')[0];
       
       const [
@@ -128,11 +133,17 @@ const StatisticsSection = () => {
 
       const { total: totalClanRevenue, trend: revenueTrend } = await fetchClanRevenue(revenueFilterYear, revenueFilterMonth);
       const activeMembersList = membersData.filter(m => !m.data_saida);
-      const totalMembers = activeMembersList.length;
-      const activeMembersCount = activeMembersList.filter(m => m.ultima_presenca && new Date(m.ultima_presenca) >= new Date(thirtyDaysAgo)).length;
       
-      const membersPresentToday = activeMembersList.filter(m => m.ultima_presenca === todayStr).length;
-      const averagePresence = totalMembers > 0 ? `${((membersPresentToday / totalMembers) * 100).toFixed(1)}%` : "0.0%";
+      const { data: attendanceData, error: attendanceError } = await supabase
+        .from('attendance_records')
+        .select('member_id', { count: 'exact' })
+        .eq('date', todayStr);
+
+      if (attendanceError) throw attendanceError;
+      const membersPresentToday = attendanceData?.length || 0;
+
+      const activeMembersOnPaper = activeMembersList.length;
+      const averagePresence = activeMembersOnPaper > 0 ? `${((membersPresentToday / activeMembersOnPaper) * 100).toFixed(1)}%` : "0.0%";
       
       const patenteCounts = activeMembersList.reduce((acc, member) => {
         if (member.patente_atual) acc[member.patente_atual] = (acc[member.patente_atual] || 0) + 1;
@@ -180,7 +191,7 @@ const StatisticsSection = () => {
       const expiredJustificationsCount = justificationsData.length - openJustificationsCount;
 
       setStats({
-        totalMembers, activeMembers: activeMembersCount, averagePresence, topPatente,
+        totalMembers: activeMembersOnPaper, activeMembers: membersPresentToday, averagePresence, topPatente,
         mostCommonWarningType, totalWarnings, totalClanRevenue, patenteDistribution,
         revenueTrend, memberFlow, missionStatus, warningDistribution,
         openJustifications: openJustificationsCount,
@@ -217,13 +228,15 @@ const StatisticsSection = () => {
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <StatCard title="Membros Ativos" value={stats.totalMembers} icon={<Users2 />} description={`${stats.activeMembers} ativos nos últimos 30d`} color="text-primary" delayIndex={1} />
-        <StatCard title="Presença Hoje" value={stats.averagePresence} icon={<ListChecks />} description="De membros ativos" color="text-green-400" delayIndex={2} />
+        <StatCard title="Membros Ativos (Quadro)" value={stats.totalMembers} icon={<Users2 />} description={`Total de membros com data de saída nula.`} color="text-primary" delayIndex={1} />
+        <StatCard title="Presença Hoje" value={stats.averagePresence} icon={<ListChecks />} description={`${stats.activeMembers} membros presentes hoje`} color="text-green-400" delayIndex={2} />
         <StatCard title="Patente Mais Comum" value={stats.topPatente} icon={<Target />} description={`${stats.patenteDistribution.find(p => p.name === stats.topPatente)?.value || 0} membros`} color="text-yellow-400" delayIndex={3} />
         <StatCard title="Advertência Mais Comum" value={stats.mostCommonWarningType} icon={<ShieldAlert />} description={`Total: ${stats.totalWarnings} advertências`} color="text-orange-400" delayIndex={4} />
         <StatCard title="Justificativas Abertas" value={stats.openJustifications} icon={<NotebookText />} description="Atualmente em período de ausência" color="text-blue-400" delayIndex={5} />
         <StatCard title="Justificativas Vencidas" value={stats.expiredJustifications} icon={<NotebookText />} description="Período de ausência finalizado" color="text-gray-400" delayIndex={6} />
       </div>
+
+      <DailyPresenceHistoryChart cardVariants={cardVariants} key={stats.averagePresence} />
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         <motion.div className="lg:col-span-3" variants={cardVariants} custom={5} initial="hidden" animate="visible">

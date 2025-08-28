@@ -1,5 +1,6 @@
+
 import { useToast } from "@/components/ui/use-toast";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/lib/customSupabaseClient";
 import { useState } from "react";
 
 export const useMemberActions = (fetchMembersCallback) => {
@@ -31,42 +32,45 @@ export const useMemberActions = (fetchMembersCallback) => {
     }
   };
 
-  const handleMemberSubmit = async (formData, currentMember) => {
+  const handleMemberSubmit = async (formData, currentMember, isManualAdd = false) => {
     setIsProcessingMemberAction(true);
-    const { id, ...dataToSave } = formData;
-    const isUpdating = currentMember && currentMember.id;
-
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Usuário não autenticado para submeter membro.");
 
-      let error;
-      if (isUpdating) {
-        ({ error } = await supabase
-          .from('members')
-          .update(dataToSave)
-          .eq('id', currentMember.id));
-        if (!error) {
-          await logAdminAction(supabase, user, 'UPDATE', `Atualizou membro: ${dataToSave.codinome || dataToSave.discord_id}`, 'members', currentMember.id, dataToSave);
+      const payload = {
+        isManualAdd: isManualAdd,
+        memberData: formData,
+      };
+
+      const { data: functionResponse, error: functionError } = await supabase.functions.invoke('create-update-panel-user', {
+        body: payload,
+      });
+
+      if (functionError) {
+        let errorMsg = functionError.message;
+        try {
+          const errorBody = await functionError.context.json();
+          if (errorBody && errorBody.error) {
+            errorMsg = errorBody.error;
+          }
+        } catch(e) {
+          // Ignore if cannot parse body
         }
-      } else {
-        ({ error } = await supabase
-          .from('members')
-          .insert([dataToSave])
-          .select());
-        if (!error) {
-          await logAdminAction(supabase, user, 'INSERT', `Adicionou novo membro: ${dataToSave.codinome || dataToSave.discord_id}`, 'members', null, dataToSave);
-        }
+        throw new Error(errorMsg);
       }
 
-      if (error) {
-        toast({ title: `Erro ao ${isUpdating ? 'atualizar' : 'adicionar'} membro`, description: error.message, variant: "destructive" });
-        return false;
-      } else {
-        toast({ title: `Membro ${isUpdating ? 'atualizado' : 'adicionado'}!`, description: `${dataToSave.codinome || dataToSave.discord_id} foi ${isUpdating ? 'atualizado' : 'adicionado'} com sucesso.` });
-        if (fetchMembersCallback) fetchMembersCallback();
-        return true;
-      }
+      if (functionResponse.error) throw new Error(functionResponse.error);
+
+      toast({ title: "Sucesso!", description: functionResponse.message });
+      
+      const actionType = isManualAdd ? 'INSERT' : 'UPDATE';
+      const description = `${isManualAdd ? 'Adicionou' : 'Atualizou'} membro: ${formData.codinome || formData.discord_id}`;
+      await logAdminAction(supabase, user, actionType, description, 'members', formData.id, formData);
+
+      if (fetchMembersCallback) fetchMembersCallback();
+      return true;
+
     } catch (e) {
       toast({ title: "Erro inesperado", description: e.message, variant: "destructive" });
       return false;
@@ -146,8 +150,8 @@ export const useMemberActions = (fetchMembersCallback) => {
             return true;
         }
     } catch (e) {
-        toast({ title: "Erro inesperado", description: e.message, variant: "destructive" });
-        return false;
+      toast({ title: "Erro inesperado", description: e.message, variant: "destructive" });
+      return false;
     } finally {
       setIsProcessingMemberAction(false);
     }

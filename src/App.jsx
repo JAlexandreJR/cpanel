@@ -1,5 +1,5 @@
 
-    import React from 'react';
+import React from 'react';
     import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
     import { Toaster } from '@/components/ui/toaster';
     import { AuthProvider, useAuth } from '@/contexts/AuthContext';
@@ -23,6 +23,8 @@
     import SchedulePage from '@/pages/admin/SchedulePage';
     import ActionLogsPage from '@/pages/admin/ActionLogsPage';
     import CommandingOfficersPage from '@/pages/admin/CommandingOfficersPage';
+    import FeedbackManagementPage from '@/pages/admin/FeedbackManagementPage';
+    import AttendanceReportPage from '@/pages/admin/AttendanceReportPage';
 
     function ProtectedRoute({ children, allowedRoles }) {
       const { user, userRole, loading } = useAuth();
@@ -174,6 +176,22 @@
               element={
                 <ProtectedRoute allowedRoles={['admin', 'moderador']}>
                   <CommandingOfficersPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route 
+              path="/admin/feedback-management"
+              element={
+                <ProtectedRoute allowedRoles={['admin', 'moderador', 'recrutador']}>
+                  <FeedbackManagementPage />
+                </ProtectedRoute>
+              }
+            />
+             <Route 
+              path="/admin/attendance-report"
+              element={
+                <ProtectedRoute allowedRoles={['admin', 'moderador']}>
+                  <AttendanceReportPage />
                 </ProtectedRoute>
               }
             />

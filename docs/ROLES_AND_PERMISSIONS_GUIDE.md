@@ -1,3 +1,4 @@
+
 # Guia de Papéis (Roles) e Permissões no Supabase - Painel GERR
 
 Este guia detalha como o sistema de papéis de usuário é implementado no painel GERR e como as permissões são gerenciadas usando Políticas de Segurança em Nível de Linha (RLS) no Supabase.
@@ -7,8 +8,8 @@ Este guia detalha como o sistema de papéis de usuário é implementado no paine
 O sistema utiliza os seguintes papéis principais, armazenados na coluna `role` da tabela `public.users`:
 
 -   **`admin`**: Acesso total a todas as funcionalidades e dados do painel.
--   **`moderador`**: Acesso a funcionalidades de moderação (Membros, Missões, Advertências, Comunicados, etc.).
--   **`recrutador`**: Acesso focado em recrutamento (adicionar e visualizar Membros).
+-   **`moderador`**: Acesso a funcionalidades de moderação (Membros, Missões, Advertências, Comunicados, Justificativas, etc.).
+-   **`recrutador`**: Acesso focado em recrutamento (adicionar e visualizar Membros, Justificativas).
 -   **`member`**: Papel padrão para usuários do painel que são membros do clã, com acesso ao seu dashboard pessoal.
 
 ## 2. Configuração no Supabase
@@ -71,23 +72,27 @@ As políticas RLS são habilitadas para cada tabela e usam `get_current_user_rol
 -   **Usuários Autenticados:** Podem visualizar todos os membros.
 -   **Usuários:** Podem atualizar seus próprios dados.
 
-### 3.2. Tabela `users` (Perfis do Painel)
+### 3.2. Tabela `justifications` (Justificativas)
+-   **Admins e Moderadores:** Acesso total.
+-   **Recrutadores:** Apenas visualização.
+
+### 3.3. Tabela `users` (Perfis do Painel)
 -   **Admins:** Gerenciam todos os perfis.
 -   **Usuários:** Visualizam e atualizam seu próprio perfil.
 
-### 3.3. Tabela `announcements` (Comunicados)
+### 3.4. Tabela `announcements` (Comunicados)
 -   **Admins e Moderadores:** Acesso total.
 -   **Outros Usuários Autenticados:** Apenas visualização.
 
-### 3.4. Tabela `missions` (Missões)
+### 3.5. Tabela `missions` (Missões)
 -   **Admins, Moderadores e Recrutadores:** Acesso total.
 -   **Outros Usuários Autenticados:** Apenas visualização.
 
-### 3.5. Tabela `action_logs` (Logs de Atividade)
+### 3.6. Tabela `action_logs` (Logs de Atividade)
 -   **Admins, Moderadores e Recrutadores:** Apenas visualização.
 -   **Sistema/Usuários Autenticados:** Permissão de `INSERT` para registrar suas próprias ações.
 
-### 3.6. Tabelas Financeiras (`treasury_categories`, `treasury_transactions`, `vip_purchases`)
+### 3.7. Tabelas Financeiras (`treasury_categories`, `treasury_transactions`, `vip_purchases`)
 -   **Admins:** Acesso total.
 -   **Outros Usuários Autenticados:** Apenas visualização.
 -   **Moderadores e Recrutadores NÃO têm acesso de modificação.**

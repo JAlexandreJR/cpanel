@@ -6,13 +6,13 @@ import { motion } from 'framer-motion';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  const logoUrl = "gerr-clan-logo.png"; 
+  const logoUrl = "https://storage.googleapis.com/hostinger-horizons-assets-prod/8b34e97e-b1fb-436b-96f9-daf091378bb8/c25396be5f48be7359286fb7f650e260.png"; 
 
   const socialLinks = [
-    { href: "https://youtube.com/@ocomandobr", icon: <Youtube size={28} />, label: "YouTube", colorClass: "hover:text-red-500" },
-    { href: "https://discord.gg/YT7XRyXBmv", icon: <DiscordIcon className="h-7 w-7" />, label: "Discord", colorClass: "hover:text-indigo-400" },
-    { href: "https://www.twitch.tv/seprac_", icon: <Twitch size={28} />, label: "Twitch", colorClass: "hover:text-purple-500" },
-    { href: "https://instagram.com/gerr_squad", icon: <Instagram size={28} />, label: "Instagram", colorClass: "hover:text-pink-500" },
+    { href: "https://youtube.com/YOUR_CHANNEL", icon: <Youtube size={28} />, label: "YouTube", colorClass: "hover:text-red-500" },
+    { href: "https://discord.gg/YOUR_DISCORD_INVITE_LINK", icon: <DiscordIcon className="h-7 w-7" />, label: "Discord", colorClass: "hover:text-indigo-400" },
+    { href: "https://twitch.tv/YOUR_CHANNEL", icon: <Twitch size={28} />, label: "Twitch", colorClass: "hover:text-purple-500" },
+    { href: "https://instagram.com/YOUR_PROFILE", icon: <Instagram size={28} />, label: "Instagram", colorClass: "hover:text-pink-500" },
   ];
 
   const footerIconVariants = {
@@ -49,9 +49,9 @@ const Footer = () => {
           <div className="flex flex-col items-center md:items-start text-center md:text-left">
             <Link to="/" className="flex items-center space-x-3 mb-4 group">
                 <motion.div whileHover={{ scale: 1.1, rotate: -5 }}>
-                  <img src={logoUrl} alt="Logo do GERR" className="h-12 w-12 text-primary group-hover:text-primary-light transition-colors" />
+                  <img src={logoUrl} alt="Logo do Clã GERR" className="h-12 w-12 text-primary group-hover:text-primary-light transition-colors" />
                 </motion.div>
-              <span className="text-3xl font-display text-foreground group-hover:text-primary-light transition-colors">GERR</span>
+              <span className="text-3xl font-display text-foreground group-hover:text-primary-light transition-colors">Clã GERR</span>
             </Link>
             <p className="text-sm max-w-md">
               Grupo Especial de Retomada e Resgate. Forjando lendas no campo de batalha virtual com disciplina, estratégia e camaradagem.
@@ -90,10 +90,10 @@ const Footer = () => {
 
         <div className="mt-16 pt-10 border-t border-border/30 text-center">
           <p className="text-sm">
-            &copy; 2023 GERR. Todos os direitos reservados.
+            &copy; {currentYear} Clã GERR. Todos os direitos reservados.
           </p>
           <p className="text-xs mt-2">
-            Desenvolvido com <span className="text-primary animate-pulse">❤️</span> por Alexandre Júnior.
+            Desenvolvido com <span className="text-primary animate-pulse">❤️</span> por Alto Comando.
           </p>
         </div>
       </div>

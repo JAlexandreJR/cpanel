@@ -50,7 +50,7 @@ const LoginPage = () => {
   const { login, user, loading } = useAuth();
   const { toast } = useToast();
 
-  const logoUrl = "gerr-clan-logo.png";
+  const logoUrl = "https://storage.googleapis.com/hostinger-horizons-assets-prod/8b34e97e-b1fb-436b-96f9-daf091378bb8/c25396be5f48be7359286fb7f650e260.png";
   
   // URL para o vídeo ou GIF de fundo. Troque para a URL desejada.
   const backgroundUrl = "/videos/gerr_hero_background.mp4"; 
@@ -175,7 +175,7 @@ const LoginPage = () => {
           </CardContent>
           <CardFooter className="text-center mt-2">
             <p className="text-xs text-muted-foreground">
-              Painel exclusivo para membros do GERR.
+              Painel exclusivo para membros do Clã GERR.
             </p>
           </CardFooter>
         </Card>
